@@ -1,0 +1,41 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: segfox_development
+  username: <%= ENV["SEGFOX_DB_USERNAME"] %>
+  password: <%= ENV["SEGFOX_DB_PASSWORD"] %>
+  host: <%= ENV.fetch("SEGFOX_DB_HOST", "localhost") %>
+  port: <%= ENV.fetch("SEGFOX_DB_PORT", 5432) %>
+
+test:
+  <<: *default
+  database: segfox_test
+  username: <%= ENV["SEGFOX_DB_USERNAME"] %>
+  password: <%= ENV["SEGFOX_DB_PASSWORD"] %>
+  host: <%= ENV.fetch("SEGFOX_DB_HOST", "localhost") %>
+  port: <%= ENV.fetch("SEGFOX_DB_PORT", 5432) %>
+
+production:
+  primary: &primary_production
+    <<: *default
+    database: segfox_production
+    username: <%= ENV["SEGFOX_DB_USERNAME"] %>
+    password: <%= ENV["SEGFOX_DB_PASSWORD"] %>
+    host: <%= ENV.fetch("SEGFOX_DB_HOST", "localhost") %>
+    port: <%= ENV.fetch("SEGFOX_DB_PORT", 5432) %>
+  cache:
+    <<: *primary_production
+    database: segfox_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: segfox_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: segfox_production_cable
+    migrations_paths: db/cable_migrate

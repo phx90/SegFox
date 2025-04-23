@@ -1,0 +1,22 @@
+<nav class="bg-green-500 text-white shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+    <div class="flex items-center space-x-4">
+      <!-- Logo com altura 100% do container (h-16) -->
+      <%= link_to root_path, class: "flex-shrink-0 h-16 flex items-center" do %>
+        <%= image_tag "banner.png",
+              alt: "SegFox",
+              class: "h-full w-auto object-contain" %>
+      <% end %>
+
+      <!-- Itens do menu -->
+      <%= link_to "Início", root_path, class: "hover:text-primary transition-colors duration-200" %>
+      <%= link_to "Cães disponíveis", dogs_path, class: "hover:text-primary transition-colors duration-200" %>
+      <%= link_to "Sobre Nós", about_path, class: "hover:text-primary transition-colors duration-200" %>
+    </div>
+
+    <div>
+      <%= link_to "Admin", admin_dogs_path,
+          class: "bg-primary text-white px-4 py-2 rounded hover:bg-green-600 transition" %>
+    </div>
+  </div>
+</nav>

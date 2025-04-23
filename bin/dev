@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "🚀 Iniciando servidor com TailwindCSS + Rails..."
+
+if ! command -v foreman &> /dev/null
+then
+  echo "❗ Foreman não está instalado. Instale com: gem install foreman"
+  exit
+fi
+
+exec foreman start -f Procfile.dev

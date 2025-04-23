@@ -1,0 +1,18 @@
+<%= form_with(model: dog, local: true) do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, class: "block font-medium text-secondary" %>
+    <%= f.text_field :name, class: "w-full border border-gray-300 p-2 rounded" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :description, class: "block font-medium text-secondary" %>
+    <%= f.text_area :description, class: "w-full border border-gray-300 p-2 rounded" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :images, class: "block font-medium text-secondary" %>
+    <%= f.file_field :images, multiple: true, class: "w-full border border-gray-300 p-2 rounded" %>
+  </div>
+
+  <%= f.submit "Salvar", class: "bg-primary text-white px-4 py-2 rounded hover:bg-opacity-80" %>
+<% end %>
