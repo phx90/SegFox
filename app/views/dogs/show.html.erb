@@ -1,10 +1,61 @@
-<p style="color: green"><%= notice %></p>
+<!-- app/views/dogs/show.html.erb -->
+<main class="max-w-4xl mx-auto px-6 py-8">
 
-<%= render @dog %>
+  <!-- Título -->
+  <h1 class="text-3xl md:text-4xl font-extrabold text-center text-white drop-shadow-md mb-8">
+    <%= @dog.name.titleize %>
+  </h1>
 
-<div>
- <%= link_to "Edit", edit_admin_dogs_path(dog) %>
-  <%= link_to "Back to dogs", dogs_path %>
+  <!-- Galeria: 2 colunas em md+, 1 coluna em sm -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <% if @dog.images.attached? %>
+      <% @dog.images.each do |img| %>
+        <div class="rounded-lg overflow-hidden shadow-md">
+          <%= image_tag img.variant(resize_to_fill: [400, 200]).processed,
+                        alt: @dog.name,
+                        class: "w-full h-[200px] object-cover" %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg">
+        <span class="text-gray-500">Sem imagens disponíveis</span>
+      </div>
+    <% end %>
+  </div>
 
-  <%= button_to "Destroy this dog", @dog, method: :delete %>
+  <!-- Info -->
+  <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg text-gray-800 space-y-3 mb-8">
+    <p><strong>Raça:</strong> <%= @dog.breed %></p>
+    <p><strong>Idade:</strong> <%= @dog.age %> anos</p>
+    <% if @dog.description.present? %>
+      <div>
+        <strong>Descrição:</strong>
+        <p class="mt-1 text-gray-700"><%= simple_format(@dog.description) %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Botões -->
+  <div class="flex justify-center gap-4">
+    <%= link_to "Voltar à lista",
+                dogs_path,
+                class: "bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300" %>
+    <% if current_user %>
+      <%= link_to "Editar este cão",
+                  edit_dog_path(@dog),
+                  class: "bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700" %>
+    <% end %>
+  </div>
+  <!-- Modal QR Code -->
+<div id="qrcode-modal" class="fixed inset-0 bg-black/50 flex justify-center items-center hidden z-50">
+  <div class="bg-white rounded-lg p-6 shadow-lg text-center relative">
+    <button onclick="document.getElementById('qrcode-modal').classList.add('hidden')"
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+      ✖
+    </button>
+    <h2 class="text-lg font-semibold mb-4">QRCode da página</h2>
+    <img src="<%= generate_qrcode(request.original_url) %>" alt="QR Code da página atual" class="mx-auto" />
+  </div>
 </div>
+
+</main>

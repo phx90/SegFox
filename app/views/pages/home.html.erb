@@ -1,21 +1,21 @@
-
-<!-- Hero -->
-<div
-  class="relative h-screen bg-cover bg-center"
-  style="background-image: url(<%= asset_path('canine.jpg') %>)"
->
-  <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 flex items-center justify-center">
+<div class="relative h-screen bg-cover bg-center overflow-hidden">
+  <div
+    class="absolute inset-0
+           bg-gradient-to-b from-black/70 via-black/50 to-black/70
+           flex items-center justify-center"
+  >
     <div class="text-center text-white max-w-4xl px-6">
-      <h1 class="text-2xl md:text-2xl font-extrabold mb-8 leading-tight tracking-tight drop-shadow-xl">
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight tracking-tight drop-shadow-xl">
         Bem-vindo à <span class="text-yellow-400">SegFox</span> 🐾
       </h1>
-      <p class="text-2xl md:text-3xl font-light leading-relaxed drop-shadow-md">
+      <p class="text-3xl md:text-4xl font-light leading-relaxed drop-shadow-md mb-6">
         Criamos vínculos eternos entre cães de raça e suas novas famílias.<br>
         Conheça nossos filhotes e encontre o seu melhor amigo!
       </p>
       <a
-        href="#dogs"
-        class="text-2xl md:text-3xl bg-green-500 text-white shadow-md sticky top-0 z-50 hover:text-primary transition-colors duration-200"
+        href="dogs"
+        class="text-2xl md:text-3xl bg-green-500 text-white shadow-md
+               hover:text-primary transition-colors duration-200 inline-block py-2 px-4"
       >
         Ver cães disponíveis
       </a>
