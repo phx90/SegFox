@@ -11,8 +11,14 @@ Rails.application.routes.draw do
   # Público: visualizar cães
   resources :dogs, only: [ :index, :show ]
 
-  # Admin: gerenciar cães
-  namespace :admin do
-    resources :dogs
-  end
+# config/routes.rb
+
+namespace :admin_area do
+  resources :dogs, only: [ :index, :new, :create, :edit, :update, :destroy ]
+end
+
+
+  get "breeds", to: "pages#breeds", as: :breeds
+  get "/terrier_brasileiro", to: "dogs#terrier_brasileiro", as: :terrier_brasileiro
+  get "pastor_da_mantiqueira", to: "dogs#pastor_da_mantiqueira"
 end

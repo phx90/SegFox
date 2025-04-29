@@ -1,5 +1,5 @@
 class DogsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :authenticate_admin!, except: [ :index, :show, :terrier_brasileiro, :pastor_da_mantiqueira ]
   before_action :set_dog,               only:   [ :show, :edit, :update, :destroy ]
   # GET /dogs or /dogs.json
   def index
@@ -12,6 +12,14 @@ class DogsController < ApplicationController
   # GET /dogs/1 or /dogs/1.json
   def show
     @dog = Dog.find(params[:id])
+  end
+
+  def terrier_brasileiro
+    @dogs = Dog.with_attached_images.where(breed: "Terrier Brasileiro")
+  end
+
+  def pastor_da_mantiqueira
+    @dogs = Dog.with_attached_images.where(breed: "Pastor da Mantiqueira")
   end
 
   # GET /dogs/new
@@ -64,11 +72,11 @@ class DogsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_dog
-      @dog = Dog.find(params.expect(:id))
+      @dog = Dog.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def dog_params
-      params.expect(dog: [ :name, :description ])
+      params.require(:dog).permit(:name, :description, :breed, :birthdate, :father_id, :mother_id, :available, images: [])
     end
 end

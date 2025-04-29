@@ -1,14 +1,22 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  # Só permite browsers modernos
   allow_browser versions: :modern
-  helper_method :user_signed_in?, :current_user
+
+  helper_method :admin_signed_in?, :current_admin
+
   private
 
-  def current_user
-    @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+  def current_admin
+    @current_admin ||= Admin.find_by(id: session[:admin_id]) if session[:admin_id]
   end
 
-  def user_signed_in?
-    current_user.present?
+  def admin_signed_in?
+    current_admin.present?
+  end
+
+  def authenticate_admin!
+    unless admin_signed_in?
+      redirect_to login_path, alert: "Você precisa estar logado para acessar esta área."
+    end
   end
 end

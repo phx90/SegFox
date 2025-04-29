@@ -1,0 +1,105 @@
+<main class="flex justify-center bg-gray-900 bg-opacity-80 min-h-screen p-6">
+  <div class="w-full max-w-xl bg-gray-800/95 backdrop-blur-sm rounded-lg shadow-lg p-8">
+    <h1 class="text-2xl font-bold text-green-400 text-center mb-6">Cadastrar Novo Cão</h1>
+
+    <% if flash[:notice] %>
+      <div class="mb-4 px-4 py-2 bg-green-100 border border-green-300 text-green-800 rounded">
+        <%= flash[:notice] %>
+      </div>
+    <% elsif flash[:alert] %>
+      <div class="mb-4 px-4 py-2 bg-red-100 border border-red-300 text-red-800 rounded">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <%= form_with model: [:admin_area, @dog], local: true, html: { multipart: true }, class: "space-y-6" do |f| %>
+      <!-- Nome -->
+      <div>
+        <%= f.label :name, "Nome do Cão *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.text_field :name, required: true, placeholder: "Digite o nome...", class: "w-full p-3 border border-gray-600 bg-gray-700 text-black placeholder-gray-500 rounded focus:ring-2 focus:ring-green-400" %>
+      </div>
+
+      <!-- Raça -->
+      <div>
+        <%= f.label :breed, "Raça *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.select :breed, [["Terrier Brasileiro", "Terrier Brasileiro"], ["Pastor da Mantiqueira", "Pastor da Mantiqueira"]], { prompt: "Selecione" }, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
+      </div>
+
+      <!-- Data de Nascimento -->
+      <div>
+        <%= f.label :birthdate, "Data de Nascimento *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.date_field :birthdate, required: true, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
+      </div>
+
+      <!-- Descrição -->
+      <div>
+        <%= f.label :description, "Descrição *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.text_area :description, required: true, rows: 4, placeholder: "Escreva uma descrição...", class: "w-full p-3 border border-gray-600 bg-gray-700 text-black placeholder-gray-500 rounded focus:ring-2 focus:ring-green-400" %>
+      </div>
+
+      <!-- Pais -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <%= f.label :father_id, "Selecionar Pai", class: "block text-gray-300 text-sm font-medium mb-1" %>
+          <%= f.collection_select :father_id, @all_dogs || [], :id, :name, { prompt: "Nenhum" }, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
+        </div>
+        <div>
+          <%= f.label :mother_id, "Selecionar Mãe", class: "block text-gray-300 text-sm font-medium mb-1" %>
+          <%= f.collection_select :mother_id, @all_dogs || [], :id, :name, { prompt: "Nenhum" }, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
+        </div>
+      </div>
+
+      <!-- Upload de Imagens -->
+      <div>
+        <%= f.label :images, "Imagens (até 4) *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.file_field :images, required: true, multiple: true, accept: "image/*", class: "w-full p-2 bg-gray-700 text-black rounded", id: "image_input" %>
+        <div id="preview" class="flex flex-wrap gap-2 mt-2"></div>
+      </div>
+
+      <!-- Disponível para Adoção -->
+      <div class="flex items-center space-x-3 mt-4">
+        <%= f.check_box :available, {}, true, false, class: "w-5 h-5 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-400" %>
+        <%= f.label :available, "Disponível para Adoção?", class: "text-gray-300 text-sm font-medium" %>
+      </div>
+
+      <!-- Botão -->
+      <div class="text-center mt-6">
+        <%= f.submit "Criar Cão", class: "px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition duration-200 ease-in-out focus:ring-2 focus:ring-green-400" %>
+      </div>
+    <% end %>
+  </div>
+</main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById('image_input');
+    const preview = document.getElementById('preview');
+    const dt = new DataTransfer();
+
+    function render() {
+      preview.innerHTML = '';
+      for (let i = 0; i < 4; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'w-[40px] h-[40px] bg-gray-700 rounded overflow-hidden';
+        if (dt.files[i]) {
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(dt.files[i]);
+          img.onload = () => URL.revokeObjectURL(img.src);
+          img.className = 'w-full h-full object-cover';
+          slot.innerHTML = '';
+          slot.appendChild(img);
+        }
+        preview.appendChild(slot);
+      }
+    }
+
+    input.addEventListener('change', (e) => {
+      Array.from(e.target.files).forEach(file => {
+        if (dt.files.length < 4) dt.items.add(file);
+      });
+      input.files = dt.files;
+      render();
+      setTimeout(() => { input.value = ''; }, 0);
+    });
+  });
+</script>

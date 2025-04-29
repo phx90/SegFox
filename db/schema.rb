@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_23_150910) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_29_041009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_23_150910) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "dog_parents", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "child_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "dogs", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -61,6 +68,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_23_150910) do
     t.datetime "updated_at", null: false
     t.string "breed"
     t.integer "age"
+    t.string "image"
+    t.integer "father_id"
+    t.integer "mother_id"
+    t.date "birth_date"
+    t.boolean "available"
   end
 
   create_table "users", force: :cascade do |t|

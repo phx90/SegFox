@@ -1,12 +1,11 @@
-<!-- app/views/dogs/show.html.erb -->
 <main class="max-w-4xl mx-auto px-6 py-8">
 
-  <!-- Título -->
+  <!-- Nome -->
   <h1 class="text-3xl md:text-4xl font-extrabold text-center text-white drop-shadow-md mb-8">
     <%= @dog.name.titleize %>
   </h1>
 
-  <!-- Galeria: 2 colunas em md+, 1 coluna em sm -->
+  <!-- Galeria -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
     <% if @dog.images.attached? %>
       <% @dog.images.each do |img| %>
@@ -23,39 +22,139 @@
     <% end %>
   </div>
 
-  <!-- Info -->
-  <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg text-gray-800 space-y-3 mb-8">
-    <p><strong>Raça:</strong> <%= @dog.breed %></p>
-    <p><strong>Idade:</strong> <%= @dog.age %> anos</p>
-    <% if @dog.description.present? %>
-      <div>
-        <strong>Descrição:</strong>
-        <p class="mt-1 text-gray-700"><%= simple_format(@dog.description) %></p>
-      </div>
-    <% end %>
-  </div>
+<!-- Info -->
+<div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg text-gray-800 space-y-3 mb-8">
+  <p><strong>Raça:</strong> <%= @dog.breed %></p>
+<p>
+  <strong>Data de nascimento:</strong>
+  <span class="<%= @dog.birth_date.present? ? '' : 'italic text-gray-500' %>">
+    <%= @dog.birth_date.present? ? @dog.birth_date.strftime('%d/%m/%Y') : "Não informada" %>
+  </span>
+</p>
 
-  <!-- Botões -->
-  <div class="flex justify-center gap-4">
+  <% if @dog.father.present? %>
+    <p><strong>Pai:</strong>
+      <%= link_to @dog.father.name, dog_path(@dog.father), class: "text-blue-700 hover:underline" %>
+    </p>
+  <% end %>
+
+  <% if @dog.mother.present? %>
+    <p><strong>Mãe:</strong>
+      <%= link_to @dog.mother.name, dog_path(@dog.mother), class: "text-blue-700 hover:underline" %>
+    </p>
+  <% end %>
+
+  <% if @dog.description.present? %>
+    <div>
+      <strong>Descrição:</strong>
+      <p class="mt-1 text-gray-700"><%= simple_format(@dog.description) %></p>
+    </div>
+  <% end %>
+</div>
+
+  <!-- Botões principais -->
+  <div class="flex flex-wrap justify-center gap-4">
     <%= link_to "Voltar à lista",
                 dogs_path,
                 class: "bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300" %>
-    <% if current_user %>
+
+    <% if current_admin %>
       <%= link_to "Editar este cão",
                   edit_dog_path(@dog),
                   class: "bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700" %>
     <% end %>
-  </div>
-  <!-- Modal QR Code -->
-<div id="qrcode-modal" class="fixed inset-0 bg-black/50 flex justify-center items-center hidden z-50">
-  <div class="bg-white rounded-lg p-6 shadow-lg text-center relative">
-    <button onclick="document.getElementById('qrcode-modal').classList.add('hidden')"
-            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-      ✖
+
+    <!-- Botão para abrir modal -->
+    <button type="button"
+            class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+            onclick="document.getElementById('qrcode-modal').style.display = 'flex'">
+      Mostrar QR Code
     </button>
-    <h2 class="text-lg font-semibold mb-4">QRCode da página</h2>
-    <img src="<%= generate_qrcode(request.original_url) %>" alt="QR Code da página atual" class="mx-auto" />
+  </div>
+  <!-- Botão para abrir o modal da árvore -->
+    <button type="button"
+            class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+            onclick="document.getElementById('pedigree-modal').style.display = 'flex'">
+      Árvore Genealógica
+    </button>
+
+  <!-- Modal -->
+  <div id="qrcode-modal"
+       style="display: none;"
+       class="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
+    <div class="bg-white rounded-xl p-6 shadow-2xl w-80 text-center relative">
+      <!-- Fechar -->
+      <button onclick="document.getElementById('qrcode-modal').style.display = 'none'"
+              class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-lg">
+        &times;
+      </button>
+      <h2 class="text-lg font-semibold mb-4">QR Code da página</h2>
+      <img src="<%= generate_qrcode(request.original_url) %>"
+           alt="QR Code da página atual"
+           class="mx-auto w-48 h-48 object-contain" />
+    </div>
+  </div>
+  
+<!-- Modal da Árvore Genealógica -->
+ <div id="pedigree-modal"
+       style="display: none;"
+       class="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
+    <div class="bg-white rounded-xl p-6 shadow-2xl w-80 text-center relative">
+    <!-- Botão de fechar -->
+    <button onclick="document.getElementById('pedigree-modal').style.display = 'none'"
+              class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-lg">
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold mb-6 text-center">
+      Árvore Genealógica de <%= @dog.name.titleize %>
+    </h2>
+
+    <div class="space-y-4 text-left text-gray-800">
+      <p><strong>Pai:</strong>
+        <% if @dog.father %>
+          <%= link_to @dog.father.name, dog_path(@dog.father), class: "text-blue-600 hover:underline" %>
+        <% else %>
+          <span class="text-gray-500 italic">Não informado</span>
+        <% end %>
+      </p>
+
+      <p><strong>Mãe:</strong>
+        <% if @dog.mother %>
+          <%= link_to @dog.mother.name, dog_path(@dog.mother), class: "text-blue-600 hover:underline" %>
+        <% else %>
+          <span class="text-gray-500 italic">Não informada</span>
+        <% end %>
+      </p>
+
+      <% if @dog.father %>
+        <p><strong>Avós paternos:</strong>
+          <ul class="list-disc ml-6">
+            <% if @dog.father.father %>
+              <li><%= link_to @dog.father.father.name, dog_path(@dog.father.father), class: "text-blue-600 hover:underline" %></li>
+            <% end %>
+            <% if @dog.father.mother %>
+              <li><%= link_to @dog.father.mother.name, dog_path(@dog.father.mother), class: "text-blue-600 hover:underline" %></li>
+            <% end %>
+          </ul>
+        </p>
+      <% end %>
+
+      <% if @dog.mother %>
+        <p><strong>Avós maternos:</strong>
+          <ul class="list-disc ml-6">
+            <% if @dog.mother.father %>
+              <li><%= link_to @dog.mother.father.name, dog_path(@dog.mother.father), class: "text-blue-600 hover:underline" %></li>
+            <% end %>
+            <% if @dog.mother.mother %>
+              <li><%= link_to @dog.mother.mother.name, dog_path(@dog.mother.mother), class: "text-blue-600 hover:underline" %></li>
+            <% end %>
+          </ul>
+        </p>
+      <% end %>
+    </div>
   </div>
 </div>
+
 
 </main>

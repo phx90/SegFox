@@ -1,0 +1,33 @@
+<!-- app/views/admin_area/dogs/index.html.erb -->
+
+<div class="max-w-6xl mx-auto p-6">
+  <h1 class="text-2xl font-bold text-green-700 mb-6">Lista de Cães</h1>
+
+  <div class="flex justify-end mb-4">
+    <%= link_to "Novo Cão", new_admin_area_dog_path, class: "bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-md p-4">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Raça</th>
+          <th class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @dogs.each do |dog| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap"><%= dog.name %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= dog.breed %></td>
+            <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+              <%= link_to "Editar", edit_admin_area_dog_path(dog), class: "text-blue-600 hover:text-blue-800 font-semibold" %>
+              <%= link_to "Excluir", admin_area_dog_path(dog), method: :delete, data: { confirm: "Tem certeza?" }, class: "text-red-600 hover:text-red-800 font-semibold" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
