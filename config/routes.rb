@@ -14,11 +14,11 @@ Rails.application.routes.draw do
 # config/routes.rb
 
 namespace :admin_area do
-  resources :dogs, only: [ :index, :new, :create, :edit, :update, :destroy ]
+  resources :dogs, only: [ :index, :new, :create, :edit, :update, :destroy, :show ]
 end
 
 
   get "breeds", to: "pages#breeds", as: :breeds
   get "/terrier_brasileiro", to: "dogs#terrier_brasileiro", as: :terrier_brasileiro
-  get "pastor_da_mantiqueira", to: "dogs#pastor_da_mantiqueira"
+  get "pastor_da_mantiqueira", to: "dogs#pastor_da_mantiqueira", as: :pastor_da_mantiqueira
 end

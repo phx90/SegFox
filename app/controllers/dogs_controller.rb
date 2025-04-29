@@ -4,7 +4,7 @@ class DogsController < ApplicationController
   # GET /dogs or /dogs.json
   def index
     @breeds = Dog.pluck(:breed).uniq.sort
-    @dogs = Dog.all
+    @dogs = Dog.where(available: true)
     @dogs = @dogs.where("name ILIKE ?", "%#{params[:query]}%") if params[:query].present?
     @dogs = @dogs.where(breed: params[:breed]) if params[:breed].present?
   end
@@ -61,11 +61,11 @@ class DogsController < ApplicationController
 
   # DELETE /dogs/1 or /dogs/1.json
   def destroy
-    @dog.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to dogs_path, status: :see_other, notice: "Dog was successfully destroyed." }
-      format.json { head :no_content }
+    @dog = Dog.find(params[:id])
+    if @dog.destroy
+      redirect_to admin_area_dogs_path, notice: "Cão excluído com sucesso!"
+    else
+      redirect_to admin_area_dogs_path, alert: "Falha ao excluir cão."
     end
   end
 
@@ -77,6 +77,6 @@ class DogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def dog_params
-      params.require(:dog).permit(:name, :description, :breed, :birthdate, :father_id, :mother_id, :available, images: [])
+      params.require(:dog).permit(:name, :description, :breed, :birth_date, :father_id, :mother_id, :available, images: [])
     end
 end

@@ -17,13 +17,13 @@
       <% end %>
     <% else %>
       <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg">
-        <span class="text-gray-500">Sem imagens disponíveis</span>
+        <span class="text-black">Sem imagens disponíveis</span>
       </div>
     <% end %>
   </div>
 
 <!-- Info -->
-<div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg text-gray-800 space-y-3 mb-8">
+<div class="bg-black backdrop-blur-sm p-6 rounded-xl shadow-lg text-white space-y-3 mb-8">
   <p><strong>Raça:</strong> <%= @dog.breed %></p>
 <p>
   <strong>Data de nascimento:</strong>
@@ -34,13 +34,13 @@
 
   <% if @dog.father.present? %>
     <p><strong>Pai:</strong>
-      <%= link_to @dog.father.name, dog_path(@dog.father), class: "text-blue-700 hover:underline" %>
+      <%= link_to @dog.father.name, dog_path(@dog.father), class: "hover:text-primary transition-colors duration-200" %>
     </p>
   <% end %>
 
   <% if @dog.mother.present? %>
     <p><strong>Mãe:</strong>
-      <%= link_to @dog.mother.name, dog_path(@dog.mother), class: "text-blue-700 hover:underline" %>
+      <%= link_to @dog.mother.name, dog_path(@dog.mother), class: "hover:text-primary transition-colors duration-200" %>
     </p>
   <% end %>
 
@@ -56,24 +56,24 @@
   <div class="flex flex-wrap justify-center gap-4">
     <%= link_to "Voltar à lista",
                 dogs_path,
-                class: "bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300" %>
+                class: "bg-gray-200 text-white px-4 py-2 rounded-full hover:text-primary transition-colors duration-200" %>
 
     <% if current_admin %>
       <%= link_to "Editar este cão",
-                  edit_dog_path(@dog),
-                  class: "bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700" %>
+                  edit_admin_area_dog_path(@dog),
+                  class: "bg-gray-200 text-white px-4 py-2 rounded-full hover:text-primary transition-colors duration-200" %>
     <% end %>
 
     <!-- Botão para abrir modal -->
     <button type="button"
-            class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+            class="bg-gray-200 text-white px-4 py-2 rounded-full hover:text-primary transition-colors duration-200"
             onclick="document.getElementById('qrcode-modal').style.display = 'flex'">
       Mostrar QR Code
     </button>
   </div>
   <!-- Botão para abrir o modal da árvore -->
     <button type="button"
-            class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+            class="bg-gray-200 text-white px-4 py-2 rounded-full hover:text-primary transition-colors duration-200"
             onclick="document.getElementById('pedigree-modal').style.display = 'flex'">
       Árvore Genealógica
     </button>
@@ -131,7 +131,7 @@
         <p><strong>Avós paternos:</strong>
           <ul class="list-disc ml-6">
             <% if @dog.father.father %>
-              <li><%= link_to @dog.father.father.name, dog_path(@dog.father.father), class: "text-blue-600 hover:underline" %></li>
+              <li><%= link_to @dog.father.father.name, dog_path(@dog.father.father), class: "hover:text-primary transition-colors duration-200" %></li>
             <% end %>
             <% if @dog.father.mother %>
               <li><%= link_to @dog.father.mother.name, dog_path(@dog.father.mother), class: "text-blue-600 hover:underline" %></li>

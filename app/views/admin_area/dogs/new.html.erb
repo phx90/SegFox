@@ -19,6 +19,12 @@
         <%= f.text_field :name, required: true, placeholder: "Digite o nome...", class: "w-full p-3 border border-gray-600 bg-gray-700 text-black placeholder-gray-500 rounded focus:ring-2 focus:ring-green-400" %>
       </div>
 
+      <!-- Disponível para Adoção -->
+      <div class="flex items-center space-x-3 mt-4">
+        <%= f.check_box :available, { class: "w-5 h-5 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-400" }, true, false %>
+        <%= f.label :available, "Disponível?", class: "text-gray-300 text-sm font-medium" %>
+      </div>
+
       <!-- Raça -->
       <div>
         <%= f.label :breed, "Raça *", class: "block text-gray-300 text-sm font-medium mb-1" %>
@@ -27,14 +33,8 @@
 
       <!-- Data de Nascimento -->
       <div>
-        <%= f.label :birthdate, "Data de Nascimento *", class: "block text-gray-300 text-sm font-medium mb-1" %>
-        <%= f.date_field :birthdate, required: true, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
-      </div>
-
-      <!-- Descrição -->
-      <div>
-        <%= f.label :description, "Descrição *", class: "block text-gray-300 text-sm font-medium mb-1" %>
-        <%= f.text_area :description, required: true, rows: 4, placeholder: "Escreva uma descrição...", class: "w-full p-3 border border-gray-600 bg-gray-700 text-black placeholder-gray-500 rounded focus:ring-2 focus:ring-green-400" %>
+        <%= f.label :birth_date, "Data de Nascimento *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.date_field :birth_date, required: true, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
       </div>
 
       <!-- Pais -->
@@ -48,18 +48,18 @@
           <%= f.collection_select :mother_id, @all_dogs || [], :id, :name, { prompt: "Nenhum" }, class: "w-full p-3 border border-gray-600 bg-gray-700 text-black rounded focus:ring-2 focus:ring-green-400" %>
         </div>
       </div>
+      
+      <!-- Descrição -->
+      <div>
+        <%= f.label :description, "Descrição *", class: "block text-gray-300 text-sm font-medium mb-1" %>
+        <%= f.text_area :description, required: true, rows: 4, placeholder: "Escreva uma descrição...", class: "w-full p-3 border border-gray-600 bg-gray-700 text-black placeholder-gray-500 rounded focus:ring-2 focus:ring-green-400" %>
+      </div>
 
       <!-- Upload de Imagens -->
       <div>
         <%= f.label :images, "Imagens (até 4) *", class: "block text-gray-300 text-sm font-medium mb-1" %>
         <%= f.file_field :images, required: true, multiple: true, accept: "image/*", class: "w-full p-2 bg-gray-700 text-black rounded", id: "image_input" %>
         <div id="preview" class="flex flex-wrap gap-2 mt-2"></div>
-      </div>
-
-      <!-- Disponível para Adoção -->
-      <div class="flex items-center space-x-3 mt-4">
-        <%= f.check_box :available, {}, true, false, class: "w-5 h-5 text-green-500 bg-gray-700 border-gray-600 rounded focus:ring-green-400" %>
-        <%= f.label :available, "Disponível para Adoção?", class: "text-gray-300 text-sm font-medium" %>
       </div>
 
       <!-- Botão -->
@@ -74,23 +74,36 @@
   document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById('image_input');
     const preview = document.getElementById('preview');
+    const fileCountDisplay = document.getElementById('file_count');
     const dt = new DataTransfer();
 
     function render() {
       preview.innerHTML = '';
-      for (let i = 0; i < 4; i++) {
+      Array.from(dt.files).forEach((file, index) => {
         const slot = document.createElement('div');
-        slot.className = 'w-[40px] h-[40px] bg-gray-700 rounded overflow-hidden';
-        if (dt.files[i]) {
-          const img = document.createElement('img');
-          img.src = URL.createObjectURL(dt.files[i]);
-          img.onload = () => URL.revokeObjectURL(img.src);
-          img.className = 'w-full h-full object-cover';
-          slot.innerHTML = '';
-          slot.appendChild(img);
-        }
+        slot.className = 'relative w-[80px] h-[80px] bg-gray-700 rounded overflow-hidden';
+
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        img.className = 'w-full h-full object-cover';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = '×';
+        removeBtn.className = 'absolute top-0 right-0 bg-black text-white w-5 h-5 rounded-full flex items-center justify-center text-xs';
+        removeBtn.onclick = (e) => {
+          e.preventDefault();
+          dt.items.remove(index);
+          input.files = dt.files;
+          render();
+        };
+
+        slot.appendChild(img);
+        slot.appendChild(removeBtn);
         preview.appendChild(slot);
-      }
+      });
+
+      fileCountDisplay.textContent = `${dt.files.length} arquivo(s) selecionado(s)`;
     }
 
     input.addEventListener('change', (e) => {
@@ -99,7 +112,7 @@
       });
       input.files = dt.files;
       render();
-      setTimeout(() => { input.value = ''; }, 0);
+      setTimeout(() => { input.value = ''; }, 0); // Limpa para permitir reenvio de mesmo arquivo
     });
   });
 </script>

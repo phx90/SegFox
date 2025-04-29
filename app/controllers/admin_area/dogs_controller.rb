@@ -32,6 +32,14 @@ class AdminArea::DogsController < ApplicationController
     end
   end
 
+  def destroy
+    @dog = Dog.find(params[:id])
+    if @dog.destroy
+      redirect_to admin_area_dogs_path, notice: "Cão excluído com sucesso!"
+    else
+      redirect_to admin_area_dogs_path, alert: "Falha ao excluir cão."
+    end
+  end
   private
 
   def set_dog
@@ -43,6 +51,6 @@ class AdminArea::DogsController < ApplicationController
   end
 
   def dog_params
-    params.require(:dog).permit(:name, :breed, :birthdate, :description, :father_id, :available, :mother_id, images: [])
+    params.require(:dog).permit(:name, :breed, :birth_date, :description, :father_id, :available, :mother_id, images: [])
   end
 end

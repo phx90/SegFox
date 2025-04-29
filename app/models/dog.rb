@@ -1,5 +1,5 @@
 class Dog < ApplicationRecord
-  has_many_attached :images
+  has_many_attached :images, dependent: :destroy
 
   belongs_to :father, class_name: "Dog", optional: true
   belongs_to :mother, class_name: "Dog", optional: true
