@@ -5,22 +5,22 @@
     <%= @dog.name.titleize %>
   </h1>
 
-  <!-- Galeria -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-    <% if @dog.images.attached? %>
-      <% @dog.images.each do |img| %>
-        <div class="rounded-lg overflow-hidden shadow-md">
-          <%= image_tag img.variant(resize_to_fill: [400, 200]).processed,
-                        alt: @dog.name,
-                        class: "w-full h-[200px] object-cover" %>
-        </div>
-      <% end %>
-    <% else %>
-      <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg">
-        <span class="text-black">Sem imagens disponíveis</span>
+<!-- Galeria -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+  <% if @dog.images.attached? %>
+    <% @dog.images.each_with_index do |img, index| %>
+      <div class="rounded-lg overflow-hidden shadow-md cursor-pointer" onclick="expandImage('<%= url_for(img) %>')">
+        <%= image_tag img.variant(resize_to_fill: [400, 200]).processed,
+                      alt: @dog.name,
+                      class: "w-full h-[200px] object-cover" %>
       </div>
     <% end %>
-  </div>
+  <% else %>
+    <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg">
+      <span class="text-black">Sem imagens disponíveis</span>
+    </div>
+  <% end %>
+</div>
 
 <!-- Info -->
 <div class="bg-black backdrop-blur-sm p-6 rounded-xl shadow-lg text-white space-y-3 mb-8">
@@ -155,6 +155,29 @@
     </div>
   </div>
 </div>
+<!-- Modal de imagem expandida -->
+<div id="image-modal"
+     class="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm hidden justify-center items-center flex-col">
+  <button onclick="closeImageModal()"
+          class="absolute top-4 right-6 text-white text-4xl font-bold hover:text-gray-300">
+    &times;
+  </button>
+  <img id="expanded-image" src="" class="max-w-3xl max-h-[80vh] rounded-lg shadow-xl border-4 border-white" />
+</div>
+<script>
+  function expandImage(src) {
+    const modal = document.getElementById('image-modal');
+    const img = document.getElementById('expanded-image');
+    img.src = src;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
 
+  function closeImageModal() {
+    const modal = document.getElementById('image-modal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+  }
+</script>
 
 </main>
