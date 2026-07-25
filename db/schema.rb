@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_29_041009) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_24_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -59,6 +59,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_041009) do
     t.integer "child_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["parent_id", "child_id"], name: "index_dog_parents_on_parent_id_and_child_id", unique: true
   end
 
   create_table "dogs", force: :cascade do |t|
@@ -72,7 +73,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_041009) do
     t.integer "father_id"
     t.integer "mother_id"
     t.date "birth_date"
-    t.boolean "available"
+    t.boolean "available", default: false
+    t.index ["available"], name: "index_dogs_on_available"
+    t.index ["breed"], name: "index_dogs_on_breed"
+    t.index ["father_id"], name: "index_dogs_on_father_id"
+    t.index ["mother_id"], name: "index_dogs_on_mother_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -85,4 +90,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_041009) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "dog_parents", "dogs", column: "child_id", on_delete: :cascade
+  add_foreign_key "dog_parents", "dogs", column: "parent_id", on_delete: :cascade
+  add_foreign_key "dogs", "dogs", column: "father_id", on_delete: :restrict
+  add_foreign_key "dogs", "dogs", column: "mother_id", on_delete: :restrict
 end

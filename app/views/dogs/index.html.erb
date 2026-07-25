@@ -1,16 +1,50 @@
 <main class="max-w-7xl mx-auto px-4 py-12">
   <h1 class="text-4xl md:text-5xl font-extrabold text-green-800 mb-8 text-center tracking-tight uppercase drop-shadow-md">Cães Disponíveis</h1>
 
+  <%= form_with url: dogs_path, method: :get, class: "mb-8 grid gap-3 rounded-2xl bg-white/95 p-4 shadow md:grid-cols-[1fr_1fr_auto]" do |form| %>
+    <div>
+      <%= form.label :query, "Buscar por nome", class: "block text-sm font-medium text-gray-800" %>
+      <%= form.search_field :query, value: params[:query], class: "mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :breed, "Raça", class: "block text-sm font-medium text-gray-800" %>
+      <%= form.select :breed, options_for_select(@breeds, params[:breed]), { include_blank: "Todas" }, class: "mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" %>
+    </div>
+    <%= form.submit "Filtrar", class: "self-end rounded-lg bg-green-700 px-5 py-2 text-white hover:bg-green-800" %>
+  <% end %>
+
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
     <% @dogs.each do |dog| %>
       <article class="overflow-hidden rounded-3xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1">
 
         <!-- Imagem -->
-        <div class="h-56 sm:h-64 md:h-72 lg:h-60 w-full overflow-hidden">
+        <div class="relative h-56 sm:h-64 md:h-72 lg:h-60 w-full overflow-hidden"
+             data-controller="carousel"
+             data-carousel-index-value="0">
           <% if dog.images.attached? %>
-            <%= image_tag url_for(dog.images.first.variant(resize_to_fill: [600, 360]).processed), alt: dog.name, class: "w-full h-full object-cover" %>
+            <% dog.images.each_with_index do |image, index| %>
+              <%= image_tag image,
+                            alt: "#{dog.name} — foto #{index + 1}",
+                            class: "absolute inset-0 h-full w-full object-cover #{'hidden' unless index.zero?}",
+                            data: { carousel_target: "slide" } %>
+            <% end %>
+
+            <% if dog.images.size > 1 %>
+              <button type="button"
+                      aria-label="Foto anterior de <%= dog.name %>"
+                      data-action="carousel#previous"
+                      class="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/60 px-3 py-2 text-2xl leading-none text-white shadow hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white">
+                &lsaquo;
+              </button>
+              <button type="button"
+                      aria-label="Próxima foto de <%= dog.name %>"
+                      data-action="carousel#next"
+                      class="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/60 px-3 py-2 text-2xl leading-none text-white shadow hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white">
+                &rsaquo;
+              </button>
+            <% end %>
           <% else %>
-            <%= image_tag "default-dog.jpg", alt: "Dog padrão", class: "w-full h-full object-cover" %>
+            <%= image_tag "canine.jpg", alt: "Imagem ilustrativa de cão", class: "w-full h-full object-cover" %>
           <% end %>
         </div>
 
@@ -44,5 +78,22 @@
 
       </article>
     <% end %>
+    <% if @dogs.empty? %>
+      <p class="col-span-full rounded-2xl bg-white/95 p-8 text-center text-gray-700">Nenhum cão disponível corresponde aos filtros.</p>
+    <% end %>
   </section>
+
+  <% if @total_pages > 1 %>
+    <nav aria-label="Paginação do catálogo" class="mt-10 flex items-center justify-center gap-3">
+      <% if @current_page > 1 %>
+        <%= link_to "Anterior", dogs_path(request.query_parameters.merge(page: @current_page - 1)), rel: "prev", class: "rounded-lg bg-white px-4 py-2 text-green-800 shadow hover:bg-green-50" %>
+      <% end %>
+      <span class="rounded-lg bg-green-800 px-4 py-2 text-white" aria-current="page">
+        Página <%= @current_page %> de <%= @total_pages %>
+      </span>
+      <% if @current_page < @total_pages %>
+        <%= link_to "Próxima", dogs_path(request.query_parameters.merge(page: @current_page + 1)), rel: "next", class: "rounded-lg bg-white px-4 py-2 text-green-800 shadow hover:bg-green-50" %>
+      <% end %>
+    </nav>
+  <% end %>
 </main>

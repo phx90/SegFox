@@ -4,9 +4,67 @@
 
 /* Seus estilos customizados podem ir aqui também */
 .home-banner {
-  background-image: url("banner.jpg");
+  background-image: url("banner.png");
   background-size: cover;
   padding: 80px;
   color: white;
   text-align: center;
+}
+
+@layer components {
+  .site-shell { color: #183126; background: #edf4ee; }
+  .site-background {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(90deg, rgba(8,35,24,.9) 0%, rgba(13,48,33,.7) 42%, rgba(12,39,29,.18) 74%), url("canine2.jpg") center 28% / cover no-repeat;
+  }
+  .site-nav {
+    border: 1px solid rgba(255,255,255,.16); border-radius: 1rem; color: white;
+    background: rgba(12,54,37,.93); box-shadow: 0 18px 50px rgba(5,28,19,.22);
+    backdrop-filter: blur(14px);
+  }
+  .brand-mark { height: 3.25rem; }
+  .nav-link { color: rgba(255,255,255,.86); transition: color .2s ease; }
+  .nav-link:hover, .nav-link:focus { color: #d7f59a; }
+  .home-hero { min-height: calc(100vh - 7rem); display: flex; align-items: center; padding: 4rem 1rem; }
+  .home-copy { max-width: 42rem; color: white; }
+  .eyebrow { display: inline-block; color: #6f9825; font-size: .75rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .home-copy .eyebrow { color: #d7f59a; }
+  .home-copy h1, .page-intro h1 { margin-top: 1rem; font-size: clamp(2.6rem,6vw,5.4rem); font-weight: 800; line-height: .98; letter-spacing: -.045em; }
+  .home-copy > p { max-width: 37rem; margin-top: 1.5rem; color: rgba(255,255,255,.82); font-size: 1.15rem; line-height: 1.75; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .button-primary, .button-secondary { display: inline-block; border-radius: .75rem; padding: .75rem 1.1rem; font-weight: 700; transition: transform .2s ease, background .2s ease; }
+  .button-primary { color: #143122; background: #b7dd65; }
+  .button-secondary { color: white; border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.08); }
+  .button-primary:hover, .button-secondary:hover { transform: translateY(-2px); }
+  .breeds-page { margin: 2rem 0; padding: clamp(1.25rem,4vw,3.5rem); border-radius: 1.5rem; background: #f8fbf8; box-shadow: 0 25px 70px rgba(6,33,22,.25); }
+  .page-intro { max-width: 50rem; margin: 0 auto 3.5rem; text-align: center; }
+  .page-intro h1 { color: #123d2a; font-size: clamp(2.3rem,5vw,4.3rem); }
+  .page-intro > p { margin-top: 1rem; color: #52665a; font-size: 1.1rem; line-height: 1.7; }
+  .breed-story { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: clamp(2rem,6vw,5rem); align-items: center; padding: 3.5rem 0; border-top: 1px solid #dce7df; }
+  .breed-story-reverse .breed-visual { order: 2; }
+  .breed-visual { position: relative; }
+  .breed-visual img { width: 100%; height: 32rem; border-radius: 1.25rem; object-fit: cover; box-shadow: 0 20px 45px rgba(17,61,42,.18); }
+  .breed-visual span { position: absolute; left: 1rem; bottom: 1rem; padding: .6rem .85rem; border-radius: 999px; color: white; background: rgba(10,45,30,.88); font-size: .75rem; font-weight: 700; }
+  .breed-content { position: relative; }
+  .breed-number { position: absolute; right: 0; top: -2.5rem; color: #e1eadf; font-size: 5.5rem; font-weight: 900; line-height: 1; }
+  .breed-content h2 { position: relative; margin: .5rem 0 1rem; color: #123d2a; font-size: clamp(2rem,4vw,3.35rem); font-weight: 800; line-height: 1.05; letter-spacing: -.035em; }
+  .breed-content h3 { margin: 1.8rem 0 .5rem; color: #20573e; font-size: 1.05rem; font-weight: 800; }
+  .breed-content p { color: #465b4e; line-height: 1.75; }
+  .breed-content p + p { margin-top: .75rem; }
+  .breed-content .lead { color: #294b38; font-size: 1.1rem; font-weight: 500; }
+  .breed-facts { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; margin: 1.5rem 0; }
+  .breed-facts div { padding: .85rem; border-radius: .75rem; background: #eaf2e8; }
+  .breed-facts strong, .breed-facts span { display: block; }
+  .breed-facts strong { color: #1f5a3e; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+  .breed-facts span { margin-top: .25rem; color: #354d40; font-size: .85rem; }
+  .text-link { color: #286a49; font-weight: 800; }
+  .text-link:hover { color: #123d2a; }
+  @media (max-width: 800px) {
+    .site-background { background-position: 60% center; }
+    .home-hero { align-items: flex-end; }
+    .breed-story { grid-template-columns: 1fr; padding: 2.5rem 0; }
+    .breed-story-reverse .breed-visual { order: 0; }
+    .breed-visual img { height: 22rem; }
+    .breed-facts { grid-template-columns: 1fr; }
+  }
 }

@@ -1,24 +1,11 @@
-<%# <div class="relative h-screen bg-cover bg-center overflow-hidden">
-  <div
-    class="absolute inset-0
-           bg-gradient-to-b from-black/70 via-black/50 to-black/70
-           flex items-center justify-center"
-  >
-    <div class="text-center text-white max-w-4xl px-6">
-      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight tracking-tight drop-shadow-xl">
-        Bem-vindo à <span class="text-yellow-400">SegFox</span> 🐾
-      </h1>
-      <p class="text-3xl md:text-4xl font-light leading-relaxed drop-shadow-md mb-6">
-        Criamos vínculos eternos entre cães de raça e suas novas famílias.<br>
-        Conheça nossos filhotes e encontre o seu melhor amigo!
-      </p>
-      <a
-        href="dogs"
-        class="text-2xl md:text-3xl bg-green-500 text-white shadow-md
-               hover:text-primary transition-colors duration-200 inline-block py-2 px-4"
-      >
-        Ver cães disponíveis
-      </a>
+<main class="home-hero">
+  <div class="home-copy">
+    <span class="eyebrow">Criação responsável • Minas Gerais</span>
+    <h1>Cães criados com cuidado, história e propósito.</h1>
+    <p>Selecionamos Terrier Brasileiro e Pastor da Mantiqueira com atenção à saúde, ao temperamento e à preservação de cada linhagem.</p>
+    <div class="hero-actions">
+      <%= link_to "Conhecer os cães", dogs_path, class: "button-primary" %>
+      <%= link_to "Conhecer as raças", breeds_path, class: "button-secondary" %>
     </div>
   </div>
-</div> %>
+</main>

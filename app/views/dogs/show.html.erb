@@ -10,7 +10,7 @@
   <% if @dog.images.attached? %>
     <% @dog.images.each_with_index do |img, index| %>
       <div class="rounded-lg overflow-hidden shadow-md cursor-pointer" onclick="expandImage('<%= url_for(img) %>')">
-        <%= image_tag img.variant(resize_to_fill: [400, 200]).processed,
+        <%= image_tag img,
                       alt: @dog.name,
                       class: "w-full h-[200px] object-cover" %>
       </div>

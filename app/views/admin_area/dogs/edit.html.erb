@@ -50,7 +50,7 @@
         <% if @dog.images.attached? %>
           <div class="mt-4 text-center">
             <p class="text-sm text-gray-500 mb-2">Foto atual:</p>
-            <%= image_tag @dog.images.first.variant(resize_to_limit: [160, 160]), class: "inline-block w-40 h-40 object-cover rounded-md border border-gray-200 shadow-sm" %>
+            <%= image_tag @dog.images.first, class: "inline-block w-40 h-40 object-cover rounded-md border border-gray-200 shadow-sm" %>
           </div>
         <% end %>
 

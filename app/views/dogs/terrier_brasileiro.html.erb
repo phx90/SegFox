@@ -13,7 +13,7 @@
             <div class="carousel-images w-full h-full relative">
               <% dog.images.each_with_index do |img, index| %>
                 <%= image_tag(
-                      url_for(img.variant(resize_to_fill: [600, 360]).processed),
+                      url_for(img),
                       class: "carousel-image absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out #{ index.zero? ? 'opacity-100 z-10' : 'opacity-0 z-0' }"
                     ) %>
               <% end %>
@@ -26,7 +26,7 @@
               ›
             </button>
           <% else %>
-            <%= image_tag 'default-dog.jpg', alt: 'Imagem padrão', class: 'w-full h-full object-cover' %>
+            <%= image_tag "canine.jpg", alt: "Imagem ilustrativa de cão", class: "w-full h-full object-cover" %>
           <% end %>
         </div>
 

@@ -1,24 +1,27 @@
 class Dog < ApplicationRecord
   has_many_attached :images, dependent: :destroy
 
-  belongs_to :father, class_name: "Dog", optional: true
-  belongs_to :mother, class_name: "Dog", optional: true
+  belongs_to :father, class_name: "Dog", optional: true, inverse_of: :fathered_children
+  belongs_to :mother, class_name: "Dog", optional: true, inverse_of: :mothered_children
 
-  has_many :fathered_children, class_name: "Dog", foreign_key: "father_id"
-  has_many :mothered_children, class_name: "Dog", foreign_key: "mother_id"
+  has_many :fathered_children, class_name: "Dog", foreign_key: "father_id",
+                               dependent: :restrict_with_exception, inverse_of: :father
+  has_many :mothered_children, class_name: "Dog", foreign_key: "mother_id",
+                               dependent: :restrict_with_exception, inverse_of: :mother
 
-  has_many :parent_links, class_name: "DogParent", foreign_key: "child_id"
-  has_many :parents, through: :parent_links, source: :parent
-  has_many :child_links, class_name: "DogParent", foreign_key: "parent_id"
-  has_many :children, through: :child_links, source: :child
+  validates :name, :breed, :birth_date, :description, presence: true
+  validates :available, inclusion: { in: [ true, false ] }
+  validates :images, attached: true,
+                     content_type: [ "image/png", "image/jpeg", "image/webp" ],
+                     size: { less_than: 5.megabytes },
+                     limit: { min: 1, max: 4 }
+  validate :parents_are_valid
 
-  validates :name, :breed, presence: true
-  validates :images, presence: true
-  validate :images_count_within_bounds
+  private
 
-  def images_count_within_bounds
-    if images.attached? && (images.count < 1 || images.count > 4)
-      errors.add(:images, "must have between 1 and 4 files")
-    end
+  def parents_are_valid
+    errors.add(:father, "não pode ser o próprio cão") if father_id.present? && father_id == id
+    errors.add(:mother, "não pode ser o próprio cão") if mother_id.present? && mother_id == id
+    errors.add(:mother, "deve ser diferente do pai") if father_id.present? && father_id == mother_id
   end
 end

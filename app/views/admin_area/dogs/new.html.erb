@@ -59,6 +59,7 @@
       <div>
         <%= f.label :images, "Imagens (até 4) *", class: "block text-gray-300 text-sm font-medium mb-1" %>
         <%= f.file_field :images, required: true, multiple: true, accept: "image/*", class: "w-full p-2 bg-gray-700 text-black rounded", id: "image_input" %>
+        <p id="file_count" class="mt-2 text-sm text-gray-300" aria-live="polite">0 arquivo(s) selecionado(s)</p>
         <div id="preview" class="flex flex-wrap gap-2 mt-2"></div>
       </div>
 

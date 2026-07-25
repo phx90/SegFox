@@ -1,48 +1,48 @@
 require "test_helper"
 
 class DogsControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    @dog = dogs(:one)
+  test "lists only available dogs" do
+    get dogs_url
+
+    assert_response :success
+    assert_select "h2", text: "Jade"
+    assert_select "h2", text: "Thor", count: 0
   end
 
-  test "should get index" do
+  test "filters by breed" do
+    get dogs_url, params: { breed: "Pastor da Mantiqueira" }
+
+    assert_response :success
+    assert_select "p", text: /Nenhum cão disponível/
+  end
+
+  test "shows a dog" do
+    get dog_url(dogs(:one))
+    assert_response :success
+  end
+
+  test "paginates the catalog and preserves accessible navigation" do
+    now = Time.current
+    13.times do |index|
+      Dog.insert!({
+        name: "Disponível #{index}",
+        description: "Cão criado para validar paginação.",
+        breed: "Terrier Brasileiro",
+        birth_date: Date.new(2023, 1, 1),
+        available: true,
+        created_at: now,
+        updated_at: now
+      })
+    end
+
     get dogs_url
     assert_response :success
-  end
+    assert_select "article", count: DogsController::PER_PAGE
+    assert_select "nav[aria-label='Paginação do catálogo']"
+    assert_select "a[rel='next']"
 
-  test "should get new" do
-    get new_dog_url
+    get dogs_url, params: { page: 2 }
     assert_response :success
-  end
-
-  test "should create dog" do
-    assert_difference("Dog.count") do
-      post dogs_url, params: { dog: { description: @dog.description, name: @dog.name } }
-    end
-
-    assert_redirected_to dog_url(Dog.last)
-  end
-
-  test "should show dog" do
-    get dog_url(@dog)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_dog_url(@dog)
-    assert_response :success
-  end
-
-  test "should update dog" do
-    patch dog_url(@dog), params: { dog: { description: @dog.description, name: @dog.name } }
-    assert_redirected_to dog_url(@dog)
-  end
-
-  test "should destroy dog" do
-    assert_difference("Dog.count", -1) do
-      delete dog_url(@dog)
-    end
-
-    assert_redirected_to dogs_url
+    assert_select "[aria-current='page']", text: /Página 2/
   end
 end

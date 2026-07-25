@@ -5,7 +5,7 @@ gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem "pg", "~> 1.6"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -41,6 +41,10 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  # Keep Windows-compatible toolchain versions until Ruby ships precompiled rbs.
+  gem "rdoc", "< 8", require: false
+  gem "minitest", "< 6"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -65,9 +69,9 @@ end
 gem "devise" # Autenticação Admin
 gem "simple_form" # Formulários bonitos
 gem "image_processing", "~> 1.2" # Processamento de imagem
+gem "aws-sdk-s3", require: false
 gem "active_storage_validations"
 gem "dotenv-rails"
-gem "tailwindcss-rails"
 gem "faker"
 gem "mini_magick"
 gem "rqrcode"

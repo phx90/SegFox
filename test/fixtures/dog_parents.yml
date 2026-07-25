@@ -1,9 +1,1 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  parent_id: 1
-  child_id: 1
-
-two:
-  parent_id: 1
-  child_id: 1
+# Relações de parentesco são criadas explicitamente pelos testes que as utilizam.

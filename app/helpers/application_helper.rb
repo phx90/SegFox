@@ -16,6 +16,6 @@ module ApplicationHelper
     )
 
     # Converte para Base64 para exibir diretamente na view
-    "data:image/png;base64,#{Base64.encode64(png.to_s)}"
+    "data:image/png;base64,#{Base64.strict_encode64(png.to_s)}"
   end
 end

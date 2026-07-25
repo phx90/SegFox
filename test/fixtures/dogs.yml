@@ -1,9 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  name: MyString
-  description: MyText
+  name: Jade
+  description: Uma cadela saudável e sociável.
+  breed: Terrier Brasileiro
+  birth_date: 2023-04-12
+  available: true
 
 two:
-  name: MyString
-  description: MyText
+  name: Thor
+  description: Um cão equilibrado e atento.
+  breed: Pastor da Mantiqueira
+  birth_date: 2022-09-03
+  available: false

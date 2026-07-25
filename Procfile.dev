@@ -1,2 +1,2 @@
 web: bin/rails server
-css: bin/rails tailwindcss:watch
+css: npx tailwindcss -c ./config/tailwind.config.js -i ./app/assets/tailwind/application.css -o ./app/assets/builds/application.css --watch

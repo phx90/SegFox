@@ -15,8 +15,9 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin!
-    unless admin_signed_in?
-      redirect_to login_path, alert: "Você precisa estar logado para acessar esta área."
-    end
+    return if admin_signed_in?
+
+    session[:return_to] = request.fullpath if request.get? || request.head?
+    redirect_to login_path, alert: "Você precisa estar logado para acessar esta área."
   end
 end

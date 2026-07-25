@@ -10,9 +10,9 @@
         <!-- Imagem -->
         <div class="h-56 sm:h-64 md:h-72 lg:h-60 w-full overflow-hidden">
           <% if dog.images.attached? %>
-            <%= image_tag url_for(dog.images.first.variant(resize_to_fill: [600, 360]).processed), alt: dog.name, class: "w-full h-full object-cover" %>
+            <%= image_tag dog.images.first, alt: dog.name, class: "w-full h-full object-cover" %>
           <% else %>
-            <%= image_tag "default-dog.jpg", alt: "Dog padrão", class: "w-full h-full object-cover" %>
+            <%= image_tag "canine.jpg", alt: "Imagem ilustrativa de cão", class: "w-full h-full object-cover" %>
           <% end %>
         </div>
 

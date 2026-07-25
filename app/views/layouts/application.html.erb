@@ -1,42 +1,24 @@
 <!DOCTYPE html>
 <html class="h-full">
   <head>
-    <title>SegFox</title>
+    <title><%= content_for(:title) || "SegFox" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Canil SegFox: Terrier Brasileiro e Pastor da Mantiqueira.">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload", media: "all" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <body class="relative min-h-screen font-sans <%= 'text-white' if content_for?(:dark_bg) %>">
-    <!-- Fundo fixo com imagem sempre visível -->
-    <div
-      style="
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: url('<%= asset_path('canine.jpg') %>') no-repeat center center fixed;
-        background-size: cover;
-        z-index: -10;
-      "
-      aria-hidden="true"
-    ></div>
-
-    <% if content_for?(:dark_bg) %>
-      <!-- Overlay escuro opcional -->
-      <div
-        style="
-          position: fixed;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: -5;"
-      ></div>
-    <% end %>
-
-    <!-- Conteúdo principal -->
+  <body class="site-shell min-h-screen font-sans">
+    <div class="site-background" aria-hidden="true"></div>
     <div class="relative z-10 min-h-screen flex flex-col">
-      <div class="w-full max-w-6xl mx-auto px-6 py-6">
+      <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4">
         <%= render "shared/navbar" %>
+        <% flash.each do |type, message| %>
+          <div role="status" class="my-4 rounded-lg px-4 py-3 <%= type.to_s == "notice" ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900" %>">
+            <%= message %>
+          </div>
+        <% end %>
         <%= yield %>
       </div>
     </div>
