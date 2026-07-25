@@ -46,8 +46,6 @@ O PostgreSQL do Compose é publicado em `localhost:5433` para não conflitar com
 
 ## Variáveis de ambiente
 
-Consulte `.env.example`. Em produção, forneça `RAILS_MASTER_KEY` por um gerenciador de segredos. Não versione `.env`, chaves ou senhas.
-
 Para armazenamento externo, defina `ACTIVE_STORAGE_SERVICE=amazon` e preencha as variáveis `AWS_*`. O endpoint configurável também permite serviços compatíveis com S3.
 
 Para recuperação de senha por e-mail, configure `APP_HOST`, `MAILER_FROM` e as variáveis `SMTP_*`. Sem `SMTP_ADDRESS`, nenhuma conexão SMTP é tentada.
@@ -88,13 +86,3 @@ docker run --rm -p 80:80 --env-file .env -e RAILS_MASTER_KEY=... segfox
 - `db/migrate`: schema e integridade referencial.
 - `db/seeds.rb`: dados iniciais idempotentes.
 - `test`: testes de modelo, requisição e sistema.
-
-## Limitações e próximos passos
-
-- Credenciais e buckets reais de S3 devem ser provisionados fora do repositório.
-- O envio de e-mail depende de um provedor SMTP externo.
-- Monitoramento, backups e observabilidade devem ser definidos conforme a infraestrutura de produção.
-
-## Licença
-
-Nenhuma licença foi definida pelo autor. Adicione uma antes de permitir redistribuição pública.
